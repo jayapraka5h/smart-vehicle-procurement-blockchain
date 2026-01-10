@@ -12,14 +12,15 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        height: 100vh;
+        min-height: 100vh;
         margin: 0;
         text-align: center;
       }
       .container {
-        max-width: 800px;
+        max-width: 900px;
         padding: 2rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
         border: 1px solid #333;
         border-radius: 10px;
         background-color: #1e1e1e;
@@ -27,6 +28,11 @@
       }
       h1 {
         color: #4caf50;
+        margin-bottom: 1rem;
+      }
+      h2 {
+        color: #ffffff;
+        margin-top: 2rem;
         margin-bottom: 1rem;
       }
       p {
@@ -52,6 +58,34 @@
         font-size: 0.9rem;
         color: #888;
       }
+      .screenshot-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-top: 20px;
+      }
+      @media (min-width: 768px) {
+        .screenshot-container {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .screenshot-card {
+        background: #2c2c2c;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .screenshot-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+      }
+      .screenshot-caption {
+        margin-top: 10px;
+        font-size: 0.9em;
+        color: #aaa;
+      }
     </style>
   </head>
   <body>
@@ -67,13 +101,32 @@
         To run this system, please clone the repository and follow the
         instructions in the manual.
       </p>
+
       <a
         href="https://github.com/jayapraka5h/smart-vehicle-procurement-blockchain"
         class="btn"
         >View Source Code on GitHub</a
       >
+
+      <h2>Project Preview</h2>
+      <p>Below are screenshots of the application running locally:</p>
+
+      <div class="screenshot-container">
+        <div class="screenshot-card">
+          <img src="screenshots/home_preview.png" alt="Home Page Preview" />
+          <div class="screenshot-caption">Landing Page</div>
+        </div>
+        <div class="screenshot-card">
+          <img
+            src="screenshots/dashboard_preview.png"
+            alt="Dashboard Preview"
+          />
+          <div class="screenshot-caption">Application Dashboard</div>
+        </div>
+      </div>
+
       <div class="footer">
-        &copy; 2024 Smart Vehicle Procurement System Project
+        &copy; 2025 Smart Vehicle Procurement System Project
       </div>
     </div>
   </body>
