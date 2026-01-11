@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Register - Smart Vehicle System</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .hero-bg {
+        background: #121212;
+      }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body
+    class="hero-bg text-white h-screen flex items-center justify-center overflow-auto py-10"
+  >
+    <div
+      class="glass-effect p-10 rounded-xl shadow-2xl w-full max-w-lg my-auto"
+    >
+      <h2
+        class="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-500"
+      >
+        Create Account
+      </h2>
+
+      <div
+        th:if="${error}"
+        class="bg-red-500 bg-opacity-20 text-red-200 p-3 rounded mb-4 text-center"
+        th:text="${error}"
+      ></div>
+
+      <form
+        th:action="@{/register}"
+        th:object="${user}"
+        method="post"
+        class="space-y-4"
+      >
+        <div>
+          <label class="block text-gray-300 mb-1">Full Name</label>
+          <input
+            type="text"
+            th:field="*{name}"
+            class="w-full bg-gray-800 border border-gray-700 rounded p-3 text-white"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-300 mb-1">Email</label>
+          <input
+            type="email"
+            th:field="*{email}"
+            class="w-full bg-gray-800 border border-gray-700 rounded p-3 text-white"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-300 mb-1">Mobile</label>
+          <input
+            type="text"
+            th:field="*{mobile}"
+            class="w-full bg-gray-800 border border-gray-700 rounded p-3 text-white"
+            required
+            pattern="\d{10}"
+            title="10 digit mobile number"
+          />
+        </div>
+        <div>
+          <label class="block text-gray-300 mb-1">Login ID (Username)</label>
+          <input
+            type="text"
+            th:field="*{loginId}"
+            class="w-full bg-gray-800 border border-gray-700 rounded p-3 text-white"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-300 mb-1">Password</label>
+          <input
+            type="password"
+            th:field="*{password}"
+            class="w-full bg-gray-800 border border-gray-700 rounded p-3 text-white"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-300 mb-1">I want to register as:</label>
+          <select
+            th:field="*{role}"
+            class="w-full bg-gray-800 border border-gray-700 rounded p-3 text-white"
+          >
+            <option value="BUYER">Buyer</option>
+            <option value="SELLER">Seller</option>
+            <option value="ADMIN">Admin (For Demo)</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-gradient-to-r from-pink-500 to-purple-600 py-3 rounded-lg font-bold hover:shadow-lg transition mt-4"
+        >
+          Register
+        </button>
+      </form>
+
+      <p class="mt-6 text-center text-gray-400">
+        Already have an account?
+        <a th:href="@{/login}" class="text-pink-400 hover:text-pink-300"
+          >Log in here</a
+        >
+      </p>
+    </div>
+  </body>
+</html>

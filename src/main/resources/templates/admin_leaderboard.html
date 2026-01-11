@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Admin - Live Leaderboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .hero-bg {
+        background: #121212;
+      }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.05);
+      }
+    </style>
+  </head>
+  <body class="hero-bg text-white font-sans flex">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-black min-h-screen border-r border-gray-800 p-6 flex flex-col fixed"
+    >
+      <h2 class="text-2xl font-bold text-blue-500 mb-10 tracking-widest">
+        SVP ADMIN
+      </h2>
+
+      <nav class="flex-1 space-y-4">
+        <a
+          th:href="@{/admin/dashboard}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Dashboard</a
+        >
+        <a
+          th:href="@{/admin/users/buyer}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Buyers</a
+        >
+        <a
+          th:href="@{/admin/users/seller}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Sellers</a
+        >
+        <a
+          th:href="@{/admin/inventory}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Inventory</a
+        >
+        <a
+          th:href="@{/admin/transactions}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Transactions</a
+        >
+        <a
+          th:href="@{/admin/reviews}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Reviews</a
+        >
+        <a
+          th:href="@{/admin/leaderboard}"
+          class="block px-4 py-3 bg-blue-900/30 text-blue-400 border border-blue-900 rounded-lg"
+          >Leaderboard</a
+        >
+      </nav>
+
+      <a
+        th:href="@{/logout}"
+        class="mt-auto px-4 py-3 bg-red-900/30 text-red-400 text-center rounded-lg hover:bg-red-900 transition border border-red-900"
+        >Logout</a
+      >
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-64 flex-1 p-10">
+      <h1 class="text-3xl font-bold mb-8 text-white flex items-center gap-3">
+        <span class="text-yellow-500">🏆</span> Live Leaderboard
+      </h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Top Sellers -->
+        <div
+          class="glass-effect rounded-xl overflow-hidden shadow-lg border border-gray-700 p-6"
+        >
+          <h2
+            class="text-xl font-bold mb-6 text-green-400 uppercase tracking-wider border-b border-gray-700 pb-2"
+          >
+            Top Sellers
+          </h2>
+          <table class="w-full text-left">
+            <thead>
+              <tr class="text-gray-500 text-sm">
+                <th class="pb-4">Rank</th>
+                <th class="pb-4">Seller</th>
+                <th class="pb-4 text-right">Sold Cars</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-300">
+              <tr
+                th:each="row, iterStat : ${topSellers}"
+                class="border-b border-gray-800 last:border-0 hover:bg-white/5 transition"
+              >
+                <td class="py-4">
+                  <span th:if="${iterStat.count == 1}" class="text-2xl"
+                    >🥇</span
+                  >
+                  <span th:if="${iterStat.count == 2}" class="text-2xl"
+                    >🥈</span
+                  >
+                  <span th:if="${iterStat.count == 3}" class="text-2xl"
+                    >🥉</span
+                  >
+                  <span
+                    th:if="${iterStat.count > 3}"
+                    th:text="${'#' + iterStat.count}"
+                    class="text-gray-500 font-mono"
+                  ></span>
+                </td>
+                <td class="py-4 font-bold text-white flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold"
+                    th:text="${#strings.substring(row[0].name,0,1)}"
+                  >
+                    S
+                  </div>
+                  <span th:text="${row[0].name}">Seller Name</span>
+                </td>
+                <td
+                  class="py-4 text-right font-mono text-xl text-green-400"
+                  th:text="${row[1]}"
+                >
+                  12
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(topSellers)}">
+                <td colspan="3" class="py-8 text-center text-gray-500 italic">
+                  No sales recorded yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Top Buyers -->
+        <div
+          class="glass-effect rounded-xl overflow-hidden shadow-lg border border-gray-700 p-6"
+        >
+          <h2
+            class="text-xl font-bold mb-6 text-blue-400 uppercase tracking-wider border-b border-gray-700 pb-2"
+          >
+            Top Buyers
+          </h2>
+          <table class="w-full text-left">
+            <thead>
+              <tr class="text-gray-500 text-sm">
+                <th class="pb-4">Rank</th>
+                <th class="pb-4">Buyer</th>
+                <th class="pb-4 text-right">Purchases</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-300">
+              <tr
+                th:each="row, iterStat : ${topBuyers}"
+                class="border-b border-gray-800 last:border-0 hover:bg-white/5 transition"
+              >
+                <td class="py-4">
+                  <span th:if="${iterStat.count == 1}" class="text-2xl"
+                    >🥇</span
+                  >
+                  <span th:if="${iterStat.count == 2}" class="text-2xl"
+                    >🥈</span
+                  >
+                  <span th:if="${iterStat.count == 3}" class="text-2xl"
+                    >🥉</span
+                  >
+                  <span
+                    th:if="${iterStat.count > 3}"
+                    th:text="${'#' + iterStat.count}"
+                    class="text-gray-500 font-mono"
+                  ></span>
+                </td>
+                <td class="py-4 font-bold text-white flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold"
+                    th:text="${#strings.substring(row[0].name,0,1)}"
+                  >
+                    B
+                  </div>
+                  <span th:text="${row[0].name}">Buyer Name</span>
+                </td>
+                <td
+                  class="py-4 text-right font-mono text-xl text-blue-400"
+                  th:text="${row[1]}"
+                >
+                  5
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(topBuyers)}">
+                <td colspan="3" class="py-8 text-center text-gray-500 italic">
+                  No purchases yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

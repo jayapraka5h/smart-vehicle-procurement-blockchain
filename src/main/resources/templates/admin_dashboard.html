@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Admin Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .hero-bg {
+        background: #121212;
+      }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.05);
+      }
+    </style>
+  </head>
+  <body class="hero-bg text-white font-sans p-8">
+    <nav class="flex justify-between items-center mb-10">
+      <h1 class="text-3xl font-bold text-yellow-500">Admin Dashboard</h1>
+      <div class="flex items-center gap-4">
+        <span class="text-gray-300"
+          >Welcome,
+          <span
+            th:text="${session.currentUser.name}"
+            class="text-yellow-400 font-bold"
+            >Admin</span
+          ></span
+        >
+        <a
+          th:href="@{/logout}"
+          class="bg-red-600 px-4 py-2 rounded hover:bg-red-700 text-sm font-bold"
+          >Logout</a
+        >
+      </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto">
+      <!-- Statistics Grid -->
+      <!-- Statistics Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <a
+          th:href="@{/admin/users/BUYER}"
+          class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:bg-gray-700/80 transition cursor-pointer group block"
+        >
+          <h3
+            class="text-gray-400 text-sm font-semibold uppercase group-hover:text-blue-300"
+          >
+            Total Buyers
+          </h3>
+          <p
+            class="text-4xl font-bold text-blue-400 mt-2"
+            th:text="${buyerCount}"
+          >
+            0
+          </p>
+        </a>
+        <a
+          th:href="@{/admin/users/SELLER}"
+          class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:bg-gray-700/80 transition cursor-pointer group block"
+        >
+          <h3
+            class="text-gray-400 text-sm font-semibold uppercase group-hover:text-purple-300"
+          >
+            Total Sellers
+          </h3>
+          <p
+            class="text-4xl font-bold text-purple-400 mt-2"
+            th:text="${sellerCount}"
+          >
+            0
+          </p>
+        </a>
+        <a
+          th:href="@{/admin/transactions}"
+          class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:bg-gray-700/80 transition cursor-pointer group block"
+        >
+          <h3
+            class="text-gray-400 text-sm font-semibold uppercase group-hover:text-green-300"
+          >
+            Sold Vehicles
+          </h3>
+          <p
+            class="text-4xl font-bold text-green-400 mt-2"
+            th:text="${soldCount}"
+          >
+            0
+          </p>
+        </a>
+        <a
+          th:href="@{/admin/inventory}"
+          class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:bg-gray-700/80 transition cursor-pointer group block"
+        >
+          <h3
+            class="text-gray-400 text-sm font-semibold uppercase group-hover:text-yellow-300"
+          >
+            Pending Sales
+          </h3>
+          <p
+            class="text-4xl font-bold text-yellow-400 mt-2"
+            th:text="${availableCount}"
+          >
+            0
+          </p>
+        </a>
+      </div>
+
+      <!-- Pending Sellers Section Removed -->
+      <div
+        class="flex justify-between items-center mb-6 border-b border-gray-700 pb-2"
+      >
+        <h2 class="text-2xl">Pending User Approvals</h2>
+        <a
+          th:href="@{/admin/transactions}"
+          class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm font-bold flex items-center gap-2"
+        >
+          <span>View Transaction History</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
+        </a>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="text-gray-400 border-b border-gray-700">
+              <th class="p-3">ID</th>
+              <th class="p-3">Name</th>
+              <th class="p-3">Email</th>
+              <th class="p-3">Role</th>
+              <th class="p-3">Status</th>
+              <th class="p-3">Action</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-300">
+            <tr
+              th:each="user : ${pendingUsers}"
+              class="border-b border-gray-800 hover:bg-gray-800"
+            >
+              <td class="p-3" th:text="${user.id}">1</td>
+              <td class="p-3" th:text="${user.name}">John Doe</td>
+              <td class="p-3" th:text="${user.email}">john@example.com</td>
+              <td class="p-3">
+                <span
+                  th:text="${user.role}"
+                  class="px-2 py-1 rounded text-xs font-bold"
+                  th:classappend="${user.role == T(com.smartvehicle.model.User.Role).BUYER ? 'bg-green-900 text-green-300' : 'bg-purple-900 text-purple-300'}"
+                >
+                  BUYER
+                </span>
+              </td>
+              <td class="p-3" th:text="${user.status}">WAITING</td>
+              <td class="p-3">
+                <a
+                  th:href="@{/admin/approve/{id}(id=${user.id})}"
+                  class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-sm"
+                  >Approve</a
+                >
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(pendingUsers)}">
+              <td colspan="6" class="p-5 text-center text-gray-500">
+                No pending users found.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

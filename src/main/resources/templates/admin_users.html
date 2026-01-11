@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Manage Users - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-white min-h-screen font-sans">
+    <!-- Navbar -->
+    <nav class="glass fixed w-full z-10 top-0">
+      <div
+        class="container mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <div
+          class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+        >
+          SVP System
+        </div>
+        <div class="flex space-x-6 items-center">
+          <a
+            th:href="@{/admin/dashboard}"
+            class="hover:text-blue-400 transition"
+            >Dashboard</a
+          >
+          <span class="text-gray-400">|</span>
+          <span
+            class="text-blue-400 font-semibold"
+            th:text="${session.currentUser.name}"
+            >Admin</span
+          >
+          <a
+            th:href="@{/logout}"
+            class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full text-sm transition"
+            >Logout</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 pt-32 pb-12">
+      <div class="flex justify-between items-center mb-8">
+        <h2
+          class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400"
+        >
+          Manage <span th:text="${roleTitle}">USERS</span>
+        </h2>
+        <a
+          th:href="@{/admin/dashboard}"
+          class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-gray-200 transition"
+        >
+          Back to Dashboard
+        </a>
+      </div>
+
+      <!-- Users Table -->
+      <div class="glass rounded-xl p-6 overflow-x-auto shadow-2xl">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr
+              class="border-b border-gray-700 text-gray-400 uppercase text-xs tracking-wider"
+            >
+              <th class="py-4 px-4">ID</th>
+              <th class="py-4 px-4">Name</th>
+              <th class="py-4 px-4">Email / Login ID</th>
+              <th class="py-4 px-4">Mobile</th>
+              <th class="py-4 px-4">Status</th>
+              <th class="py-4 px-4 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-800">
+            <tr
+              th:each="user : ${users}"
+              class="hover:bg-white/5 transition group"
+            >
+              <td
+                class="py-4 px-4 font-mono text-gray-500"
+                th:text="${user.id}"
+              >
+                1
+              </td>
+              <td
+                class="py-4 px-4 font-semibold text-white"
+                th:text="${user.name}"
+              >
+                John Doe
+              </td>
+              <td class="py-4 px-4">
+                <div class="text-gray-300" th:text="${user.email}">
+                  john@example.com
+                </div>
+                <div class="text-xs text-gray-500" th:text="${user.loginId}">
+                  user123
+                </div>
+              </td>
+              <td class="py-4 px-4 text-gray-400" th:text="${user.mobile}">
+                9876543210
+              </td>
+              <td class="py-4 px-4">
+                <span
+                  th:text="${user.status}"
+                  class="px-2 py-1 rounded text-xs font-bold"
+                  th:classappend="${user.status == T(com.smartvehicle.model.User.Status).APPROVED ? 'bg-green-900 text-green-300' : (user.status == T(com.smartvehicle.model.User.Status).REJECTED ? 'bg-red-900 text-red-300' : 'bg-yellow-900 text-yellow-300')}"
+                >
+                  APPROVED
+                </span>
+              </td>
+              <td class="py-4 px-4 flex justify-center gap-3">
+                <a
+                  th:if="${user.status != T(com.smartvehicle.model.User.Status).REJECTED}"
+                  th:href="@{/admin/user/deactivate/{id}(id=${user.id})}"
+                  onclick="return confirm('Are you sure you want to deactivate this user? They will not be able to login.')"
+                  class="bg-orange-500/20 hover:bg-orange-500/40 text-orange-400 border border-orange-500/50 px-3 py-1.5 rounded text-xs transition uppercase font-bold tracking-wide"
+                >
+                  Deactivate
+                </a>
+                <!-- Delete Option Removed as per Blockchain Policy -->
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(users)}">
+              <td colspan="6" class="py-12 text-center text-gray-500 italic">
+                No users found with this role.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

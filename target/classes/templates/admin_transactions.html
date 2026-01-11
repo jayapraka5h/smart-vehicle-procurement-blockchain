@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Admin Transaction History - Smart Vehicle Procurement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-white min-h-screen font-sans">
+    <!-- Navbar -->
+    <nav class="glass fixed w-full z-10 top-0">
+      <div
+        class="container mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <div
+          class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+        >
+          SVP System
+        </div>
+        <div class="flex space-x-6 items-center">
+          <a
+            th:href="@{/admin/dashboard}"
+            class="hover:text-blue-400 transition"
+            >Dashboard</a
+          >
+          <span class="text-gray-400">|</span>
+          <span
+            class="text-blue-400 font-semibold"
+            th:text="${session.currentUser.name}"
+            >Admin</span
+          >
+          <a
+            th:href="@{/logout}"
+            class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full text-sm transition"
+            >Logout</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 pt-32 pb-12">
+      <div class="flexflex-col mb-8">
+        <div class="flex justify-between items-center mb-6">
+          <h2
+            class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400"
+          >
+            Vehicle Inventory
+          </h2>
+          <a
+            th:href="@{/admin/dashboard}"
+            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-gray-200 transition"
+          >
+            Back to Dashboard
+          </a>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-4 border-b border-gray-700">
+          <a
+            th:href="@{/admin/inventory}"
+            class="px-6 py-3 text-gray-400 hover:text-white border-b-2 border-transparent hover:border-gray-500 font-medium whitespace-nowrap transition"
+          >
+            Pending Inventory (Available)
+          </a>
+          <a
+            href="#"
+            class="px-6 py-3 text-blue-400 border-b-2 border-blue-400 font-bold bg-white/5 whitespace-nowrap"
+          >
+            Sold Inventory (History)
+          </a>
+        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="glass rounded-xl p-6 overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-gray-700 text-gray-400">
+              <th class="py-4 px-4">Transaction ID (Hash)</th>
+              <th class="py-4 px-4">Vehicle No</th>
+              <th class="py-4 px-4">Seller</th>
+              <th class="py-4 px-4">Buyer</th>
+              <th class="py-4 px-4">Price</th>
+              <th class="py-4 px-4">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              th:each="vehicle : ${transactions}"
+              class="border-b border-gray-800 hover:bg-white/5 transition"
+            >
+              <td
+                class="py-4 px-4 font-mono text-xs text-yellow-400 truncate max-w-xs"
+                th:text="${vehicle.blockHash}"
+              >
+                SHA256...
+              </td>
+              <td
+                class="py-4 px-4 font-semibold"
+                th:text="${vehicle.vehicleNumber}"
+              >
+                TN-01-AB-1234
+              </td>
+              <td
+                class="py-4 px-4 text-blue-300"
+                th:text="${vehicle.seller.name}"
+              >
+                Seller Name
+              </td>
+              <td
+                class="py-4 px-4 text-green-300"
+                th:text="${vehicle.buyer.name}"
+              >
+                Buyer Name
+              </td>
+              <td class="py-4 px-4 text-white" th:text="${'$' + vehicle.price}">
+                $5000
+              </td>
+              <td
+                class="py-4 px-4 text-gray-400 text-sm"
+                th:text="${#temporals.format(vehicle.createdAt, 'yyyy-MM-dd HH:mm')}"
+              >
+                2023-10-10
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(transactions)}">
+              <td colspan="6" class="py-8 text-center text-gray-500 italic">
+                No transactions found on the blockchain simulation yet.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-8 flex justify-center">
+        <a
+          th:href="@{/admin/dashboard}"
+          class="text-gray-400 hover:text-white transition flex items-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

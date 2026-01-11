@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>My Profile - Smart Vehicle Procurement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .hero-bg {
+        background: #121212;
+      }
+    </style>
+  </head>
+  <body
+    class="hero-bg text-white min-h-screen font-sans flex items-center justify-center p-4"
+  >
+    <div class="max-w-4xl w-full">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-8">
+        <h2
+          class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+        >
+          My Profile
+        </h2>
+        <a
+          th:href="@{${user.role == T(com.smartvehicle.model.User.Role).ADMIN ? '/admin/dashboard' : (user.role == T(com.smartvehicle.model.User.Role).SELLER ? '/seller/dashboard' : '/buyer/dashboard')}}"
+          class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-gray-200 transition"
+        >
+          Back to Dashboard
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Profile Info Form -->
+        <div class="glass p-8 rounded-xl shadow-2xl">
+          <h3
+            class="text-xl font-bold mb-6 text-blue-400 flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+            Personal Details
+          </h3>
+          <form th:action="@{/profile/update}" method="post" class="space-y-4">
+            <div>
+              <label class="block text-gray-400 text-sm mb-1"
+                >Login ID (Cannot Edit)</label
+              >
+              <input
+                type="text"
+                th:value="${user.loginId}"
+                disabled
+                class="w-full bg-gray-900/50 border border-gray-700 text-gray-500 rounded p-2 cursor-not-allowed"
+              />
+            </div>
+
+            <div>
+              <label class="block text-gray-400 text-sm mb-1"
+                >Full Name (Cannot Edit)</label
+              >
+              <input
+                type="text"
+                th:value="${user.name}"
+                disabled
+                class="w-full bg-gray-900/50 border border-gray-700 text-gray-500 rounded p-2 cursor-not-allowed"
+              />
+            </div>
+
+            <div>
+              <label class="block text-gray-400 text-sm mb-1">Email</label>
+              <input
+                type="email"
+                name="email"
+                th:value="${user.email}"
+                required
+                class="w-full bg-gray-800 border border-gray-600 text-white rounded p-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-gray-400 text-sm mb-1"
+                >Mobile Number</label
+              >
+              <input
+                type="text"
+                name="mobile"
+                th:value="${user.mobile}"
+                required
+                pattern="\d{10}"
+                title="10 digit mobile number"
+                class="w-full bg-gray-800 border border-gray-600 text-white rounded p-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition mt-4"
+            >
+              Update Profile
+            </button>
+
+            <div
+              th:if="${success}"
+              class="text-green-400 text-sm mt-2 text-center"
+              th:text="${success}"
+            ></div>
+          </form>
+        </div>
+
+        <!-- Change Password Form -->
+        <div class="glass p-8 rounded-xl shadow-2xl">
+          <h3
+            class="text-xl font-bold mb-6 text-purple-400 flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+            Security
+          </h3>
+          <form
+            th:action="@{/profile/password}"
+            method="post"
+            class="space-y-4"
+          >
+            <div>
+              <label class="block text-gray-400 text-sm mb-1"
+                >Current Password</label
+              >
+              <input
+                type="password"
+                name="currentPassword"
+                required
+                class="w-full bg-gray-800 border border-gray-600 text-white rounded p-2 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-gray-400 text-sm mb-1"
+                >New Password</label
+              >
+              <input
+                type="password"
+                name="newPassword"
+                required
+                minlength="4"
+                class="w-full bg-gray-800 border border-gray-600 text-white rounded p-2 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition mt-4"
+            >
+              Change Password
+            </button>
+
+            <div
+              th:if="${error}"
+              class="text-red-400 text-sm mt-2 text-center"
+              th:text="${error}"
+            ></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

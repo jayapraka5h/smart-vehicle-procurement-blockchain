@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Admin - Customer Reviews</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .hero-bg {
+        background: #121212;
+      }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.05);
+      }
+    </style>
+  </head>
+  <body class="hero-bg text-white font-sans flex">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-black min-h-screen border-r border-gray-800 p-6 flex flex-col fixed"
+    >
+      <h2 class="text-2xl font-bold text-blue-500 mb-10 tracking-widest">
+        SVP ADMIN
+      </h2>
+
+      <nav class="flex-1 space-y-4">
+        <a
+          th:href="@{/admin/dashboard}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Dashboard</a
+        >
+        <a
+          th:href="@{/admin/users/buyer}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Buyers</a
+        >
+        <a
+          th:href="@{/admin/users/seller}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Sellers</a
+        >
+        <a
+          th:href="@{/admin/inventory}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Inventory</a
+        >
+        <a
+          th:href="@{/admin/transactions}"
+          class="block px-4 py-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition"
+          >Transactions</a
+        >
+        <a
+          th:href="@{/admin/reviews}"
+          class="block px-4 py-3 bg-blue-900/30 text-blue-400 border border-blue-900 rounded-lg"
+          >Reviews</a
+        >
+      </nav>
+
+      <a
+        th:href="@{/logout}"
+        class="mt-auto px-4 py-3 bg-red-900/30 text-red-400 text-center rounded-lg hover:bg-red-900 transition border border-red-900"
+        >Logout</a
+      >
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-64 flex-1 p-10">
+      <h1 class="text-3xl font-bold mb-8 text-white">Customer Reviews</h1>
+
+      <div
+        class="glass-effect rounded-xl overflow-hidden shadow-lg border border-gray-700"
+      >
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr
+              class="bg-gray-900 text-gray-400 text-sm border-b border-gray-700"
+            >
+              <th class="p-4 font-normal uppercase tracking-wider">Date</th>
+              <th class="p-4 font-normal uppercase tracking-wider">Vehicle</th>
+              <th class="p-4 font-normal uppercase tracking-wider">Buyer</th>
+              <th class="p-4 font-normal uppercase tracking-wider">Rating</th>
+              <th class="p-4 font-normal uppercase tracking-wider">Comment</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-300">
+            <tr
+              th:each="review : ${reviews}"
+              class="border-b border-gray-800 last:border-0 hover:bg-white/5 transition"
+            >
+              <td
+                class="p-4 text-sm text-gray-500"
+                th:text="${#temporals.format(review.createdAt, 'dd-MM-yyyy')}"
+              >
+                01-01-2026
+              </td>
+              <td
+                class="p-4 text-white font-medium"
+                th:text="${review.vehicle.vehicleNumber}"
+              >
+                KA-01
+              </td>
+              <td class="p-4">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold"
+                    th:text="${#strings.substring(review.buyer.name,0,1)}"
+                  >
+                    U
+                  </div>
+                  <span th:text="${review.buyer.name}">User</span>
+                </div>
+              </td>
+              <td class="p-4">
+                <div class="flex text-yellow-500 text-lg">
+                  <span th:each="i : ${#numbers.sequence(1, review.rating)}"
+                    >★</span
+                  >
+                  <span
+                    th:if="${review.rating < 5}"
+                    th:each="i : ${#numbers.sequence(review.rating + 1, 5)}"
+                    class="text-gray-700"
+                    >★</span
+                  >
+                </div>
+              </td>
+              <td
+                class="p-4 text-sm italic text-gray-400"
+                th:text="${review.comment}"
+              >
+                "Great car"
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(reviews)}">
+              <td colspan="5" class="p-8 text-center text-gray-500 italic">
+                No reviews found.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

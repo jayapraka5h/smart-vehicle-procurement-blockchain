@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Add Vehicle</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .hero-bg {
+        background: #121212;
+      }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.05);
+      }
+    </style>
+  </head>
+  <body
+    class="hero-bg text-white h-screen flex items-center justify-center p-4"
+  >
+    <div
+      class="glass-effect p-8 rounded-xl shadow-2xl w-full max-w-2xl border border-gray-800"
+    >
+      <h2 class="text-2xl font-bold mb-6 text-center text-purple-400">
+        Register New Vehicle
+      </h2>
+
+      <form
+        th:action="@{/vehicle/add}"
+        method="post"
+        enctype="multipart/form-data"
+        th:object="${vehicle}"
+        class="grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
+        <div class="col-span-2">
+          <label class="block text-gray-400 mb-1">Vehicle Number</label>
+          <input
+            type="text"
+            th:field="*{vehicleNumber}"
+            class="w-full bg-gray-900 border border-gray-700 rounded p-3 text-white focus:border-purple-500 outline-none"
+            placeholder="e.g. TN-07-AL-4949"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-gray-400 mb-1">Price ($)</label>
+          <input
+            type="number"
+            th:field="*{price}"
+            class="w-full bg-gray-900 border border-gray-700 rounded p-3 text-white focus:border-purple-500 outline-none"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-gray-400 mb-1">Vehicle Image</label>
+          <input
+            type="file"
+            name="image"
+            class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-gray-300"
+            required
+          />
+        </div>
+
+        <div class="col-span-2">
+          <label class="block text-gray-400 mb-1"
+            >Accident History / Description</label
+          >
+          <textarea
+            th:field="*{accidentsHistory}"
+            class="w-full bg-gray-900 border border-gray-700 rounded p-3 text-white focus:border-purple-500 outline-none h-24"
+            placeholder="Describe condition or history..."
+          ></textarea>
+        </div>
+
+        <div class="col-span-2 flex justify-end space-x-4">
+          <a
+            th:href="@{/seller/dashboard}"
+            class="px-6 py-3 rounded text-gray-400 hover:text-white"
+            >Cancel</a
+          >
+          <button
+            type="submit"
+            class="bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-3 rounded text-white font-bold hover:shadow-lg"
+          >
+            Add Vehicle
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
