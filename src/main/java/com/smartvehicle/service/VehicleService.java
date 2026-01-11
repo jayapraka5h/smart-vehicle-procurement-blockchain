@@ -36,6 +36,10 @@ public class VehicleService {
         return vehicleRepository.findBySeller(seller);
     }
 
+    public Vehicle getVehicleById(Long id) {
+        return vehicleRepository.findById(id).orElse(null);
+    }
+
     public void purchaseVehicle(Long vehicleId, User buyer) {
         Vehicle vehicle = vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new RuntimeException("Vehicle not found"));

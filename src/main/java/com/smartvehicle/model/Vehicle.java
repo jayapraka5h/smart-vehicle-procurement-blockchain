@@ -16,8 +16,14 @@ public class Vehicle {
 
     @Column(unique = true, nullable = false)
     private String vehicleNumber;
+    
+    @Lob
+    @Column(columnDefinition="BINARY VARYING") // Or just @Lob usually works with Postgres + Spring Boot
+    private byte[] image;
 
-    private String imagePath;
+    private String imageContentType;
+
+    // private String imagePath; // We are removing file-based storage path
     
     @Column(length = 2000)
     private String accidentsHistory;
@@ -53,8 +59,14 @@ public class Vehicle {
     public String getVehicleNumber() { return vehicleNumber; }
     public void setVehicleNumber(String vehicleNumber) { this.vehicleNumber = vehicleNumber; }
 
-    public String getImagePath() { return imagePath; }
-    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+    public byte[] getImage() { return image; }
+    public void setImage(byte[] image) { this.image = image; }
+
+    public String getImageContentType() { return imageContentType; }
+    public void setImageContentType(String imageContentType) { this.imageContentType = imageContentType; }
+    
+    // public String getImagePath() { return imagePath; }
+    // public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 
     public String getAccidentsHistory() { return accidentsHistory; }
     public void setAccidentsHistory(String accidentsHistory) { this.accidentsHistory = accidentsHistory; }

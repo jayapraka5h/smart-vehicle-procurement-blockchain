@@ -155,12 +155,12 @@
                 </td>
                 <td class="py-5 px-6 text-right">
                   <img
-                    th:if="${vehicle.imagePath != null}"
-                    th:src="@{${vehicle.imagePath}}"
+                    th:if="${vehicle.image != null}"
+                    th:src="@{/vehicle/image/{id}(id=${vehicle.id})}"
                     class="h-12 w-20 object-cover rounded-lg border border-gray-600 inline-block shadow-sm"
                   />
                   <div
-                    th:if="${vehicle.imagePath == null}"
+                    th:if="${vehicle.image == null}"
                     class="h-12 w-20 bg-gray-800 rounded-lg border border-gray-700 inline-flex items-center justify-center text-xs text-gray-500"
                   >
                     No Image

@@ -44,13 +44,10 @@ public class VehicleController {
         if (user == null || user.getRole() != User.Role.SELLER) return "redirect:/login";
 
         try {
-            // Save Image
+            // Save Image to DB
             if (!image.isEmpty()) {
-                String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-                Path path = Paths.get(UPLOAD_DIR + fileName);
-                Files.createDirectories(path.getParent());
-                Files.write(path, image.getBytes());
-                vehicle.setImagePath("/uploads/" + fileName);
+                vehicle.setImage(image.getBytes());
+                vehicle.setImageContentType(image.getContentType());
             }
             
             vehicleService.addVehicle(vehicle, user);
@@ -60,6 +57,18 @@ public class VehicleController {
             e.printStackTrace();
             return "redirect:/vehicle/add?error=" + e.getMessage();
         }
+    }
+
+    @GetMapping("/image/{id}")
+    @ResponseBody
+    public org.springframework.http.ResponseEntity<byte[]> getVehicleImage(@PathVariable Long id) {
+        Vehicle vehicle = vehicleService.getVehicleById(id);
+        if (vehicle != null && vehicle.getImage() != null) {
+            return org.springframework.http.ResponseEntity.ok()
+                    .contentType(org.springframework.http.MediaType.parseMediaType(vehicle.getImageContentType()))
+                    .body(vehicle.getImage());
+        }
+        return org.springframework.http.ResponseEntity.notFound().build();
     }
 
     // --- Buyer Operations ---
