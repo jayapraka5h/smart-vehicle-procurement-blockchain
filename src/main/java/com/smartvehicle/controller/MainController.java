@@ -25,8 +25,8 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        // Fetch top 3 latest 5-star reviews for the homepage
-        model.addAttribute("happyCustomers", feedbackRepository.findTop3ByRatingOrderByCreatedAtDesc(5));
+        // Fetch top 3 highest rated reviews for the homepage
+        model.addAttribute("happyCustomers", feedbackRepository.findTop3ByOrderByRatingDescCreatedAtDesc());
         
         // Fetch Top 3 Sellers and Buyers using Java Stream aggregation (Fail-safe)
         java.util.List<com.smartvehicle.model.Vehicle> allVehicles = vehicleRepository.findAll();

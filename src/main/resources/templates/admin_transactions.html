@@ -78,64 +78,105 @@
       </div>
 
       <!-- Transactions Table -->
-      <div class="glass rounded-xl p-6 overflow-x-auto">
-        <table class="w-full text-left">
-          <thead>
-            <tr class="border-b border-gray-700 text-gray-400">
-              <th class="py-4 px-4">Transaction ID (Hash)</th>
-              <th class="py-4 px-4">Vehicle No</th>
-              <th class="py-4 px-4">Seller</th>
-              <th class="py-4 px-4">Buyer</th>
-              <th class="py-4 px-4">Price</th>
-              <th class="py-4 px-4">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              th:each="vehicle : ${transactions}"
-              class="border-b border-gray-800 hover:bg-white/5 transition"
-            >
-              <td
-                class="py-4 px-4 font-mono text-xs text-yellow-400 truncate max-w-xs"
-                th:text="${vehicle.blockHash}"
+      <div
+        class="glass rounded-xl overflow-hidden shadow-2xl border border-gray-700"
+      >
+        <div
+          class="p-6 bg-gradient-to-r from-gray-800/50 to-gray-900/50 border-b border-gray-700"
+        >
+          <h3 class="text-lg font-semibold text-gray-200">Blockchain Ledger</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr
+                class="bg-gray-900/80 text-gray-400 uppercase text-xs tracking-wider"
               >
-                SHA256...
-              </td>
-              <td
-                class="py-4 px-4 font-semibold"
-                th:text="${vehicle.vehicleNumber}"
+                <th class="py-5 px-6 font-semibold">Transaction ID (Hash)</th>
+                <th class="py-5 px-6 font-semibold">Vehicle Info</th>
+                <th class="py-5 px-6 font-semibold">Seller</th>
+                <th class="py-5 px-6 font-semibold">Buyer</th>
+                <th class="py-5 px-6 font-semibold">Price</th>
+                <th class="py-5 px-6 font-semibold">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800 text-sm">
+              <tr
+                th:each="vehicle : ${transactions}"
+                class="hover:bg-white/5 transition duration-150"
               >
-                TN-01-AB-1234
-              </td>
-              <td
-                class="py-4 px-4 text-blue-300"
-                th:text="${vehicle.seller.name}"
-              >
-                Seller Name
-              </td>
-              <td
-                class="py-4 px-4 text-green-300"
-                th:text="${vehicle.buyer.name}"
-              >
-                Buyer Name
-              </td>
-              <td class="py-4 px-4 text-white" th:text="${'$' + vehicle.price}">
-                $5000
-              </td>
-              <td
-                class="py-4 px-4 text-gray-400 text-sm"
-                th:text="${#temporals.format(vehicle.createdAt, 'yyyy-MM-dd HH:mm')}"
-              >
-                2023-10-10
-              </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(transactions)}">
-              <td colspan="6" class="py-8 text-center text-gray-500 italic">
-                No transactions found on the blockchain simulation yet.
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <td
+                  class="py-5 px-6 font-mono text-xs max-w-xs truncate text-yellow-500/80 bg-yellow-500/5 rounded p-2 m-2"
+                >
+                  <span th:text="${vehicle.blockHash}">SHA256...</span>
+                </td>
+                <td class="py-5 px-6">
+                  <div
+                    class="font-bold text-white text-base"
+                    th:text="${vehicle.vehicleNumber}"
+                  >
+                    TN-01
+                  </div>
+                  <div class="text-xs text-green-400 mt-0.5">
+                    Verified Asset
+                  </div>
+                </td>
+                <td class="py-5 px-6">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                    <span
+                      class="text-purple-300 font-medium"
+                      th:text="${vehicle.seller.name}"
+                      >Seller</span
+                    >
+                  </div>
+                </td>
+                <td class="py-5 px-6">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                    <span
+                      class="text-green-300 font-medium"
+                      th:text="${vehicle.buyer.name}"
+                      >Buyer</span
+                    >
+                  </div>
+                </td>
+                <td
+                  class="py-5 px-6 font-mono text-white text-base font-bold"
+                  th:text="${'$' + #numbers.formatDecimal(vehicle.price, 0, 'COMMA', 0, 'POINT')}"
+                >
+                  $5,000
+                </td>
+                <td
+                  class="py-5 px-6 text-gray-400 font-medium"
+                  th:text="${#temporals.format(vehicle.createdAt, 'MMM dd, yyyy HH:mm')}"
+                >
+                  Oct 10, 2023
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(transactions)}">
+                <td colspan="6" class="py-16 text-center text-gray-500 italic">
+                  <div class="flex flex-col items-center">
+                    <svg
+                      class="w-12 h-12 text-gray-700 mb-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      ></path>
+                    </svg>
+                    <p>No transactions recorded yet.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="mt-8 flex justify-center">
