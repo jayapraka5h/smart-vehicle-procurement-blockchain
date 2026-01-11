@@ -56,9 +56,9 @@ public class VehicleController {
             vehicleService.addVehicle(vehicle, user);
             return "redirect:/seller/dashboard";
             
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/vehicle/add?error=Upload failed";
+            return "redirect:/vehicle/add?error=" + e.getMessage();
         }
     }
 
