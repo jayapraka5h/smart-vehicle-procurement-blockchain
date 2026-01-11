@@ -12,7 +12,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        exposeDirectory("src/main/resources/static/uploads/", registry);
+        exposeDirectory("uploads/", registry);
     }
 
     private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {

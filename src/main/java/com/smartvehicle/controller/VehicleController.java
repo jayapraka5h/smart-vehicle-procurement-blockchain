@@ -23,7 +23,7 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
     
-    private final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+    private final String UPLOAD_DIR = "uploads/";
 
     // --- Seller Operations ---
 
